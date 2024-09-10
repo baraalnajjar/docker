@@ -29,7 +29,7 @@ services:
       - backend
 
   analytics-service:
-    image: analyticsservice:latest
+    image: baraanajjarc/analyticsservice:latest
     container_name: analytics-service-container
     restart: always
     ports:
@@ -38,7 +38,7 @@ services:
       - backend
 
   authentication-service:
-    image: authenticationservice:latest
+    image: baraanajjarc/authenticationservice:latest
     container_name: authentication-service-container
     restart: always
     ports:
