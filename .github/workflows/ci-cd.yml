@@ -15,25 +15,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
+      - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      - name: Build analytics-service Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: Dockerfile.compose.yaml
-          push: false
-          tags: baraanajjarc/analyticsservice:latest
-
-      - name: Build authentication-service Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: Dockerfile.compose.yaml
-          push: false
-          tags: baraanajjarc/authenticationservice:latest
-
-      - name: Deploy with Docker Compose
+      - name: Build and Deploy with Docker Compose
         run: |
-          docker-compose -f docker-compose.yml up -d
+          docker-compose -f docker-compose.yml up --build -d
