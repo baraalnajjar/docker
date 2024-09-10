@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_DATABASE: dockerDB
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - backend
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo-container
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27023:27017"
+    volumes:
+      - mongo:/data/db
+    networks:
+      - backend
+
+  analytics-service:
+    image: analyticsservice:latest
+    container_name: analytics-service-container
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
+  authentication-service:
+    image: authenticationservice:latest
+    container_name: authentication-service-container
+    restart: always
+    ports:
+      - "8081:8081"
+    networks:
+      - backend
+
+
+volumes:
+  mysql:
+    driver: local
+  mongo:
+
+networks:
+  backend:
