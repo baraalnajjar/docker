@@ -1,0 +1,39 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build analytics-service Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile.compose.yaml
+          push: false
+          tags: baraanajjarc/analyticsservice:latest
+
+      - name: Build authentication-service Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile.compose.yaml
+          push: false
+          tags: baraanajjarc/authenticationservice:latest
+
+      - name: Deploy with Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml up -d
